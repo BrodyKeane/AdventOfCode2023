@@ -30,23 +30,40 @@ struct GameInfo {
 }
 
 pub fn verify_games(path: &str) -> u32 {
+    let games = parse_games(path);
+    let mut sum = 0;
+
+    for game in games {
+        if game.is_valid() { sum += game.id }
+    }
+    return sum
+}
+
+pub fn sum_of_powers_of_games(path: &str) -> u32 {
+    let games = parse_games(path);
+    let mut sum = 0;
+
+    for game in games {
+        sum += game.get_power();
+    }
+    return sum
+}
+
+fn parse_games(path: &str) -> Vec<GameInfo> {
     let file = fs::read_to_string(path)
         .expect(&format!("File: {path} could not be read."));
 
     let games = file.lines();
-
-    let mut sum = 0;
     let mut game_parser = GameParser::default();
+    let mut parsed_games: Vec<GameInfo> = vec![];
 
     for game in games {
-        let game_info = match game_parser.parse(game) {
-            Some(game_info) => game_info,
+        match game_parser.parse(game) {
+            Some(game_info) => parsed_games.push(game_info),
             None => continue,
         };
-        if game_info.is_valid() { sum += game_info.id }
-        println!("ID: {} IS VALID: {}", game_info.id, game_info.is_valid());
     }
-    return sum
+    return parsed_games
 }
 
 impl GameParser {
@@ -211,6 +228,10 @@ impl GameInfo {
         }
 
         return GameInfo { id, min_red, min_green, min_blue }
+    }
+
+    pub fn get_power(&self) -> u32 {
+        return self.min_red * self.min_blue * self.min_green
     }
 
     fn is_valid(&self) -> bool {

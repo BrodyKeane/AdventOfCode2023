@@ -1,19 +1,23 @@
-use crate::day3::SchematicParser;
+#![allow(dead_code, non_snake_case)]
 
 mod day1;
 mod day2;
 mod day3;
 mod day4;
+mod day5;
+mod day6;
+mod day7;
 
 fn main() {
-    let path = "input_files/day4_part1_long.txt";
-    let points = day4::find_total_cards(path);
-    println!("{}", points);
+    let path = "input_files/day7_part1_long.txt";
+    let winnings = day7::total_winnings(path);
+    println!("{}", winnings);
 }
 
 #[cfg(test)]
 mod tests {
     use super::*;
+    use crate::day3::SchematicParser;
 
     #[test]
     fn day1_part1_short() {

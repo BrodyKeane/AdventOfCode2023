@@ -1,0 +1,97 @@
+use std::{fs, u64, usize};
+
+
+pub fn find_nearest_viable_location(path: &str) -> u64 {
+    let file = fs::read_to_string(path)
+        .expect(&format!("File: {path} could not be read."));
+
+
+    let headers: [&str; 7] = [
+        "seed-to-soil map:",
+        "soil-to-fertilizer map:",
+        "fertilizer-to-water map:",
+        "water-to-light map:",
+        "light-to-temperature map:",
+        "temperature-to-humidity map:",
+        "humidity-to-location map:",
+    ];
+
+    let mut segments: [&str; 8] = Default::default();
+    let mut segment: &str;
+    
+    let mut remaining = file.strip_prefix("seeds: ").unwrap();
+
+    for (i, header) in headers.iter().enumerate() {
+        (segment, remaining) = remaining.split_once(header).unwrap();
+        segments[i] = segment;
+    } 
+
+    segments[7] = remaining;
+    
+    let seeds: Vec<u64> = 
+        segments[0].split(" ")
+        .filter_map(|s| s.trim().parse::<u64>().ok())
+        .collect();
+
+
+
+    return 0;
+}
+
+pub struct SeedMapParser {
+    lines: Vec<String>,
+    line: usize,
+}
+
+
+impl SeedMapParser {
+    pub fn new(path: &str) -> Self {
+        let file = fs::read_to_string(path)
+            .expect(&format!("File: {path} could not be read."));
+
+        let lines = file
+            .lines()
+            .map(String::from)
+            .collect::<Vec<String>>();
+
+            SeedMapParser { lines, line: 0 }
+        }
+
+    pub fn find_nearest_viable_location(&mut self) -> u64 {
+        let seeds = self.find_seeds();
+        for seed in seeds {
+            println!("{}", seed);
+        }
+
+
+
+
+        let mut nearest: u64 = 0;
+
+        return nearest
+    }
+
+    fn find_seeds(&self) -> Vec<u64> {
+        let seeds: Vec<u64> = 
+            self.lines[0].split(" ")
+            .filter_map(|s| s.trim().parse::<u64>().ok())
+            .collect();
+
+        return seeds
+    }
+}
+
+
+
+
+struct Map {
+    destination: u64,
+    source: u64,
+    range: u64,
+}
+
+impl Map {
+    pub fn new(destination: u64, source: u64, range:u64) -> Self {
+        Map { destination, source, range }
+    }
+}

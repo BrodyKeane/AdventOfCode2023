@@ -1,4 +1,4 @@
-use std::{fs, collections::HashMap, usize};
+use std::fs;
 
 
 pub fn find_total_points(path: &str) -> usize {
